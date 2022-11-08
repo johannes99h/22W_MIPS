@@ -1,38 +1,29 @@
-	.data
-		n: 	.word 	0		# Initialisierung der ganzzahl. Var. n
-		msg:	.asciiz	"Zahl n"
-	.text
+.text
+	main:
+		# Frage nach Integer ( NICHT GEFRAGT! )
+		li $v0,4			# v0-Modus -> String ausgeben
+		la $a0,Aufforderung		# Ausgabe der Nachricht
+		syscall
+	
+		# Einlesen des Integers n
+		li $v0,5			# v0-Modus -> String einlesen
+		syscall
+		move $s0,$v0			# RetVal in "längerlebiges" Register
+	
+		# weiteren String ausgeben ( NICHT GEFRAGT! ) 
+		li $v0,4			# v0-Modus -> String ausgeben
+		la $a0,Ueberpruefung		# Ausgabe der Nachricht
+		syscall
+		
+		# Ausgabe des Integers n ( NICHT GEFRAGT! )
+		li $v0,1			# v0-Modus -> Integer ausgeben
+		move $a0,$s0
+		syscall
 
-	.globl main
-main:
-	li $v0,4
-	la $v0,msg			# Ausgabe der Nachricht
-	syscall
-	
-	li $v0,5
-	syscall
-	move $s0,$v0			# RetVal in "längerlebiges" Register
-	
-	# Einlesen der Integer
-	lw $t0,$s3			# Wert der Var. n auf den Stack
-	read_int			# eingelesener Wert steckt in $v0 (nicht-volatil?)
-	syscall 
-	sw $v0,$s3			# RetVal -> Speicher (Var. n)
-	
-	# Überprüfung: n > 0
-	
-	
-	# if(n > 0) { n weitere Zahlen einlesen }
-	bne $s4,$s3,else		# stellt if-Bed. dar
-	add $s0,$s1,$s2
-	j exit
-else: 	sub $s0,$s1,$s2			# stellt else-Bed. dar
-exit:
-	
-	
-	# Ausgabe der Integer
-	
-	
-	syscall
+		# Programm beenden
+		li $v0,10
+		syscall
 
-
+.data
+	Aufforderung:	.asciiz		"Zahl n: "
+	Ueberpruefung: 	.asciiz		"eingegebene Zahl: "
