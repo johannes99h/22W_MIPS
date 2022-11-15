@@ -34,7 +34,24 @@
 
 		# if-else-Statement
 			bne $a0,$s1,else		# Vergleich von n mit Null
-			# hier while-Schleife einbauen!
+
+			# while-Schleife
+			li	$s3, 0
+			li	$s4, 1
+			li	$s5, 5
+			la	$s6, n			# Startadresse von Feld a ist in $s6
+			loop:
+				add	$t1, $s3, $s3	# t1=i+i
+				add	$t1, $t1, $t1	# t1=4*i
+				add	$t1, $t1, $s6	# t1 enthält Adresse von a[i]
+				lw	$t0, 0($t1)	# t0=a[i]
+				bne	$t0, $s5, exit 
+				add	$s3, $s3, $s4	# i=i+j
+				j	loop
+			exit:
+				li	$v0, 10
+				syscall
+			
 			li $v0,4			# Frage nach weiterem Integer
 			la $a0,weitereAufforderung	# Ausgabe des Strings 
 			syscall
